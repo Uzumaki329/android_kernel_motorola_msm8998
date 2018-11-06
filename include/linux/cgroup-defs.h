@@ -324,16 +324,7 @@ struct cgroup_root {
 	int hierarchy_id;
 
 	/* The root cgroup.  Root is destroyed on its release. */
-struct your_struct {
-    
-   
-    // Other fields of fixed size
-
-    
-
-   // Variable-sized field at the end
-    struct cgroup cgrp;
-};
+	struct cgroup cgrp;
 
 	/* for cgrp->ancestor_ids[0] */
 	int cgrp_ancestor_id_storage;
