@@ -630,7 +630,7 @@ all: vmlinux
 ifeq ($(cc-name),clang)
 ifneq ($(CROSS_COMPILE),)
 CLANG_TRIPLE	?= $(CROSS_COMPILE)
-CLANG_FLAGS     += --target=$(notdir $(CLANG_TRIPLE:%-=%))
+CLANG_FLAGS	:= --target=$(notdir $(CLANG_TRIPLE:%-=%))
 ifeq ($(shell $(srctree)/scripts/clang-android.sh $(CC) $(CLANG_FLAGS)), y)
 $(error "Clang with Android --target detected. Did you specify CLANG_TRIPLE?")
 endif
@@ -641,11 +641,31 @@ endif
 ifneq ($(GCC_TOOLCHAIN),)
 CLANG_FLAGS	+= --gcc-toolchain=$(GCC_TOOLCHAIN)
 endif
-CLANG_FLAGS	+= -Werror=unknown-warning-option
-CLANG_FLAGS    += $(call cc-option, -Wno-misleading-indentation)
-CLANG_FLAGS    += $(call cc-option, -Wno-bool-operation)
+CLANG_FLAGS	+= -no-integrated-as
 KBUILD_CFLAGS	+= $(CLANG_FLAGS)
 KBUILD_AFLAGS	+= $(CLANG_FLAGS)
+endif
+
+# Make toolchain changes before including arch/$(SRCARCH)/Makefile to ensure
+# ar/cc/ld-* macros return correct values.
+ifdef CONFIG_LTO_CLANG
+# use LLVM linker LLD for LTO linking and vmlinux_link
+LD		:= $(LDLLD)
+# use llvm-ar for building symbol tables from IR files, and llvm-nm instead
+# of objdump for processing symbol versions and exports
+LLVM_AR		:= llvm-ar
+LLVM_NM		:= llvm-nm
+export LLVM_AR LLVM_NM
+# Set O3 optimization level for LTO
+LDFLAGS		+= --plugin-opt=O3
+endif
+
+ifeq ($(cc-name),clang)
+ifeq ($(ld-name),lld)
+KBUILD_CFLAGS	+= -fuse-ld=lld
+LDFLAGS		+= -O2
+endif
+KBUILD_CPPFLAGS	+= -Qunused-arguments
 endif
 
 # The arch Makefile can set ARCH_{CPP,A,C}FLAGS to override the default
