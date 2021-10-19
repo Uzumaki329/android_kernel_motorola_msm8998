@@ -62,16 +62,15 @@ ifeq ($(CONFIG_COMPAT_VDSO), y)
   # Note: this Makefile is read both before and after regenerating the config
   # (if needed). Any warning appearing before the config has been regenerated
   # should be ignored. If the error is triggered and you set
-  # CONFIG_CROSS_COMPILE_ARM32, set CROSS_COMPILE_ARM32 to an appropriate value
-  # when invoking make and fix CONFIG_CROSS_COMPILE_ARM32.
-  ifeq ($(CROSS_COMPILE_ARM32),)
-    $(error CROSS_COMPILE_ARM32 not defined or empty, the compat vDSO will not be built)
-  else ifeq ($(cc-name),clang)
-    export CROSS_COMPILE_COMPAT
+  # CONFIG_CROSS_COMPILE_COMPAT, set CROSS_COMPILE_COMPAT to an appropriate value
+  # when invoking make and fix CONFIG_CROSS_COMPILE_COMPAT.
+  ifeq ($(cc-name),clang)
     export CONFIG_VDSO32 := y
     vdso32 := -DCONFIG_VDSO32=1
-  else ifeq ($(shell which $(CROSS_COMPILE_ARM32)$(cc-name) 2> /dev/null),)
-    $(error $(CROSS_COMPILE_ARM32)$(cc-name) not found, check CROSS_COMPILE_ARM32)
+  else ifeq ($(CROSS_COMPILE_COMPAT),)
+    $(error CROSS_COMPILE_COMPAT not defined or empty, the compat vDSO will not be built)
+  else ifeq ($(shell which $(CROSS_COMPILE_COMPAT)$(cc-name) 2> /dev/null),)
+    $(error $(CROSS_COMPILE_COMPAT)$(cc-name) not found, check CROSS_COMPILE_COMPAT)
   else
     export CROSS_COMPILE_ARM32
     export CONFIG_VDSO32 := y
