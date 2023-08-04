@@ -49,9 +49,9 @@ gen_headers_out_arm = [
 
     // Matching generated-y:
 
-    "asm/unistd-common.h",
-    "asm/unistd-oabi.h",
-    "asm/unistd-eabi.h",
+   "video/v4l2_camera_ext_ctrls.h",
+   "video/v4l2_camera_ext_defs.h",
+   "video/v4l2_camera_ext_events.h",
 
     // Matching mandatory-y:
 
@@ -691,6 +691,11 @@ gen_headers_out_arm = [
     "xen/gntalloc.h",
     "xen/gntdev.h",
     "xen/privcmd.h",
+    "linux/netfilter/xt_tlv.h",
+    "linux/android/binderfs.h",
+    "linux/bpf_perf_event.h",
+    "sound/msm-cirrus-playback.h",
+    "linux/mmi_sys_temp.h",
     "linux/android/binder.h",
     "linux/byteorder/big_endian.h",
     "linux/byteorder/little_endian.h",
@@ -844,7 +849,6 @@ gen_headers_out_arm = [
     "linux/netfilter_ipv6/ip6t_mh.h",
     "linux/netfilter_ipv6/ip6t_opts.h",
     "linux/netfilter_ipv6/ip6t_rt.h",
-    "linux/nfc/nfcinfo.h",
     "linux/nfsd/cld.h",
     "linux/nfsd/debug.h",
     "linux/nfsd/export.h",
